@@ -1,0 +1,28 @@
+language: php
+os:
+    - linux
+git:
+    depth: 1
+php:
+    - '7.1'
+    - '7.2'
+    - nightly
+matrix:
+    fast_finish: true
+sudo: false
+install:
+    - composer install
+cache:
+    directories:
+        - vendor
+        - $HOME/.cache/composer
+script:
+    - ./vendor/bin/phploc --count-tests src tests
+    - ./vendor/bin/phpmd src text phpmd.xml
+    - ./vendor/bin/phpcs --standard=PSR2 --extensions=php src --report=full
+    - ./vendor/bin/phpcpd src
+    - ./vendor/bin/phpunit --coverage-text
+notifications:
+    email:
+        on_success: never
+        on_failure: always
