@@ -2,10 +2,11 @@
 
 namespace Macgriog\StateMachine;
 
-use Macgriog\StateMachine\Contracts\FactoryContract;
-use Macgriog\StateMachine\Factory\Factory;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
+use Macgriog\StateMachine\Commands\DebugCommand;
+use Macgriog\StateMachine\Contracts\FactoryContract;
+use Macgriog\StateMachine\Factory\Factory;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -23,7 +24,11 @@ class ServiceProvider extends BaseServiceProvider
      */
     public function boot()
     {
-        //
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                DebugCommand::class,
+            ]);
+        }
     }
 
     /**
